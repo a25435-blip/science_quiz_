@@ -1,0 +1,25 @@
+Física;Qual destes planetas é conhecido como o "Planeta Vermelho"?;Júpiter;Marte;Vénus;b
+Física;Qual é a força que mantém os planetas na órbita do Sol?;Gravidade;Magnetismo;Inércia;a
+Física;Quem propôs a Teoria da Relatividade Geral?;Albert Einstein;Galileu Galilei;Isaac Newton;a
+Física;Um objeto desloca-se com velocidade constante de 10 m/s. Qual a aceleração?;10 m/s2;0 m/s2;9,8 m/s2;b
+Física;Se a força resultante duplicar e a massa for constante, a aceleração:;Mantém-se;Duplica;Diminui para metade;b
+Química;O que representa o número atómico de um elemento?;Massa total;Quantidade de protões;Quantidade de neutrões;b
+Química;Qual é o gás mais abundante na atmosfera da Terra?;Azoto (Nitrogénio);Dióxido de Carbono;Oxigénio;a
+Química;A que temperatura a água ferve ao nível do mar?;100ºC;120ºC;90ºC;a
+Química;Qual destas substâncias tem um pH mais baixo (mais ácido)?;Leite;Sumo de limão;Água pura;b
+Química;Um átomo neutro tem 11 protões e 12 neutrões. Qual a massa e eletrões?;A=23 e 11 eletrões;A=23 e 12 eletrões;A=11 e 12 eletrões;a
+Biologia;Qual é a unidade básica da vida em todos os seres vivos?;Átomo;Molécula;Célula;c
+Biologia;Qual é a principal função dos glóbulos vermelhos no sangue?;Combater infeções;Transportar oxigénio;Coagular o sangue;b
+Biologia;Onde se localiza o ADN na maioria das células eucarióticas?;Ribossoma;Núcleo;Citoplasma;b
+Biologia;Qual o organelo responsável pela produção de energia (ATP)?;Lisossoma;Complexo de Golgi;Mitocôndria;c
+Biologia;Como se designam os seres que produzem o seu próprio alimento?;Autotróficos;Heterotróficos;Decompositores;a
+Geologia;Na escala de Mohs, qual é o mineral com dureza máxima (10)?;Diamante;Talco;Quartzo;a
+Geologia;Qual o principal agente de erosão que forma vales em "V"?;Vento;Glaciares;Rios;c
+Geologia;Como se chama a deformação das rochas que origina curvaturas?;Falhas;Diáclase;Dobra;c
+Geologia;Como se chama a lava que parece cordas enroladas?;Pillow lava;Lava pahoehoe;Lava aa;b
+Geologia;Os fósseis de fáceis (ou de ambiente) servem para:;Idade absoluta;Reconstituir o ambiente;Composição mineral;b
+Matemática;Se 3kg de maçãs custam 6€, quanto custarão 5kg?;12,00€;10,00€;8,00€;b
+Matemática;Qual é a área de um quadrado de perímetro 20 cm?;25 cm2;20 cm2;400 cm2;a
+Matemática;Qual é o valor de x na equação 2x + 10 = 30?;x=20;x=5;x=10;c
+Matemática;Quanto é 5 ao cubo (5^3)?;25;125;15;b
+Matemática;Ao lançar um dado de 6 faces, qual a probabilidade de sair par?;1/6;1/3;1/2;c
