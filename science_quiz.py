@@ -1,93 +1,101 @@
-import streamlit as st #para que o código funcione no site definido por nós
-import os #O ficheiro "os" confirma que o ficheiro "Questoes.txt" existe, evitando que o programa dê erro e feche sozinho.
+import streamlit as st 
+import os 
 
-class Cores: #paleta de cores para deixar o código mais belo esteticamente
-    VERDE = '\033[92m'
-    AMARELO = '\033[93m'
-    VERMELHO = '\033[91m'
-    AZUL = '\033[94m'
-    NEGRITO = '\033[1m'
-    FIM = '\033[0m'
-
+class Cores: 
+    VERDE = ''
+    AMARELO = ''
+    VERMELHO = ''
+    AZUL = ''
+    NEGRITO = ''
+    FIM = ''
 
 # --- GESTÃO DE DADOS ---
 
 def carregar_perguntas(Questoes):
-    perguntas = {} #Dicionário vazio para organizar as perguntas em cada tema, acumulando-as até que o programa feche
-    if not os.path.exists(Questoes): #"os.path.exists" verifica se o ficheiro em conta (questoes) existe
-        st.write(f"Erro: Ficheiro de perguntas não encontrado!{Cores.VERMELHO}{Questoes}{Cores.FIM}")
+    perguntas = {} 
+    if not os.path.exists(Questoes):
+        st.error(f"Erro: Ficheiro de perguntas não encontrado! {Questoes}")
         return perguntas
 
     with open(Questoes, 'r', encoding='utf-8') as f:
         for linha in f:
-            Tema, questao, a, b, c, correta = linha.strip().split(';') #".split(;)"Transforma uma string única numa lista, cortando-a sempre que encontrar o ";"
-            if Tema not in perguntas:
-                perguntas[Tema] = []
-            perguntas[Tema].append({'Pergunta': questao,'opcoes': [a, b, c],'correta': correta})
+            if ";" in linha:
+                Tema, questao, a, b, c, correta = linha.strip().split(';')
+                if Tema not in perguntas:
+                    perguntas[Tema] = []
+                perguntas[Tema].append({'Pergunta': questao,'opcoes': [a, b, c],'correta': correta})
     return perguntas
-
 
 def guardar_pontuacao(nome, pontos):
     with open("ranking.txt", "a", encoding='utf-8') as f:
         f.write(f"{nome};{pontos}\n")
 
-
 def exibir_ranking():
-    st.write(f"\n{Cores.AZUL}--- RANKING GLOBAL ---{Cores.FIM}")
-    if not os.path.exists("ranking.txt"): #"ranking.txt" é o ficheiro onde o nome e pontos dos jogadores saõ guardados
-        st.write(f"{Cores.AMARELO}Ainda não há jogadores registados.{Cores.FIM}")
+    st.subheader("--- RANKING GLOBAL ---")
+    if not os.path.exists("ranking.txt"):
+        st.write("Ainda não há jogadores registados.")
         return
 
     jogadores = []
     with open("ranking.txt", "r", encoding='utf-8') as f:
         for linha in f:
-            nome, pontos = linha.strip().split(';')
-            jogadores.append((nome, int(pontos)))
+            if ";" in linha:
+                nome, pontos = linha.strip().split(';')
+                jogadores.append((nome, int(pontos)))
 
-    # Ordena por pontuação (do maior para o menor)
-    ranking_ordenado = sorted(jogadores, key=lambda x: x[1], reverse=True) #"reverse" é argumento da função sorted(), que inverte a ordem do ranking
-   #"lambda" é uma função anónima que funciona como um argumento que "economiza código"
-    for i, (nome, pontos) in enumerate(ranking_ordenado, 1): #O "enumerate" funciona como um organizador de listas/tuplas/dicionários que nos entrega pares como os indices e seus valores
+    ranking_ordenado = sorted(jogadores, key=lambda x: x[1], reverse=True)
+    for i, (nome, pontos) in enumerate(ranking_ordenado, 1):
         st.write(f"{i}º - {nome}: {pontos} pontos")
-
 
 # --- LÓGICA DO JOGO ---
 
 def jogar(perguntas_por_tema):
-    st.write(f"{Cores.AMARELO}Bem-vindo ao Science Quiz!{Cores.FIM}")
-    nome = st.text_input(f"{Cores.AMARELO}Introduza o seu nome: {Cores.FIM}")
+    st.title("🚀 Science Quiz")
+    
+    nome = st.text_input("Introduza o seu nome:")
+    if not nome:
+        st.warning("Por favor, introduza o seu nome para começar.")
+        st.stop()
 
     temas = list(perguntas_por_tema.keys())
-    st.write(f"\n{Cores.NEGRITO}Temas disponíveis:{Cores.FIM}")
+    st.write("### Temas disponíveis:")
     for i, Tema in enumerate(temas, 1):
-        st.write(f"{Cores.NEGRITO}{i}. {Tema}{Cores.FIM}")
+        st.write(f"{i}. {Tema}")
 
-    escolha_input = st.text_input("Escolha o número do tema: ")
-if escolha_input: # Só corre se não estiver vazio
-    escolha = int(escolha_input) - 1
-    tema_escolhido = temas[escolha]
-else:
-    st.stop() # Para o código aqui até o utilizador escrever
-    tema_escolhido = temas[escolha]
+    escolha_input = st.text_input("Escolha o número do tema (ex: 1):")
+    
+    if escolha_input: 
+        try:
+            indice = int(escolha_input) - 1
+            tema_escolhido = temas[indice]
+        except:
+            st.error("Por favor, insira um número válido.")
+            st.stop()
+            
+        pontuacao = 0
+        questoes = perguntas_por_tema[tema_escolhido]
 
-    pontuacao = 0
-    questoes = perguntas_por_tema[tema_escolhido]
+        for idx, q in enumerate(questoes):
+            st.markdown(f"---")
+            st.write(f"**{q['Pergunta']}**")
+            
+            # Usar selectbox ou radio para as respostas no Streamlit funciona melhor que text_input
+            opcoes = [f"A) {q['opcoes'][0]}", f"B) {q['opcoes'][1]}", f"C) {q['opcoes'][2]}"]
+            resposta_user = st.radio(f"Escolha a sua resposta para a questão {idx+1}:", ["-"] + opcoes, key=f"quest_{idx}")
 
-    for q in questoes:
-        st.write(f"\n{q['Pergunta']}")
-        opcoes_letras = ['A', 'B', 'C']
-        for i, opcao in enumerate(q['opcoes']):
-            st.write(f"{opcoes_letras[i]}) {opcao}")
-        resposta = st.text_input("Qual a sua resposta (A, B, ou C)? ").upper().lower()#".lower()" transforma "A" em "a" e o "upper()" transforma "a" em "A"
-        if resposta == q['correta']:
-           st.write(f"{Cores.VERDE}Correto! (+20 pontos){Cores.FIM}")
-           pontuacao += 20
-        else:
-            st.write(f"{Cores.VERMELHO}Errado! A resposta correta era {q['correta']}{Cores.FIM}.")
+            if resposta_user != "-":
+                letra_escolhida = resposta_user[0] # Pega apenas o 'A', 'B' ou 'C'
+                if letra_escolhida.lower() == q['correta'].lower():
+                    st.success("Correto! (+20 pontos)")
+                    pontuacao += 20
+                else:
+                    st.error(f"Errado! A resposta correta era {q['correta']}.")
 
-    st.write(f"{Cores.AMARELO}\nFim de jogo, {nome}! Pontuação Final: {pontuacao}/100{Cores.FIM}")
-    guardar_pontuacao(nome, pontuacao)
-
+        if st.button("Finalizar e Guardar Pontuação"):
+            st.balloons()
+            st.info(f"Fim de jogo, {nome}! Pontuação Final: {pontuacao}")
+            guardar_pontuacao(nome, pontuacao)
+            st.session_state['ver_ranking'] = True
 
 # --- EXECUÇÃO PRINCIPAL ---
 
@@ -95,4 +103,5 @@ banco_perguntas = carregar_perguntas("Questoes.txt")
 
 if banco_perguntas:
     jogar(banco_perguntas)
-    exibir_ranking()
+    if st.session_state.get('ver_ranking'):
+        exibir_ranking()
