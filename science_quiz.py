@@ -15,7 +15,7 @@ class Cores: #paleta de cores para deixar o código mais belo esteticamente
 def carregar_perguntas(Questoes):
     perguntas = {} #Dicionário vazio para organizar as perguntas em cada tema, acumulando-as até que o programa feche
     if not os.path.exists(Questoes): #"os.path.exists" verifica se o ficheiro em conta (questoes) existe
-        print(f"Erro: Ficheiro de perguntas não encontrado!{Cores.VERMELHO}{Questoes}{Cores.FIM}")
+        st.write(f"Erro: Ficheiro de perguntas não encontrado!{Cores.VERMELHO}{Questoes}{Cores.FIM}")
         return perguntas
 
     with open(Questoes, 'r', encoding='utf-8') as f:
@@ -33,9 +33,9 @@ def guardar_pontuacao(nome, pontos):
 
 
 def exibir_ranking():
-    print(f"\n{Cores.AZUL}--- RANKING GLOBAL ---{Cores.FIM}")
+    st.write(f"\n{Cores.AZUL}--- RANKING GLOBAL ---{Cores.FIM}")
     if not os.path.exists("ranking.txt"): #"ranking.txt" é o ficheiro onde o nome e pontos dos jogadores saõ guardados
-        print(f"{Cores.AMARELO}Ainda não há jogadores registados.{Cores.FIM}")
+        st.write(f"{Cores.AMARELO}Ainda não há jogadores registados.{Cores.FIM}")
         return
 
     jogadores = []
@@ -48,39 +48,44 @@ def exibir_ranking():
     ranking_ordenado = sorted(jogadores, key=lambda x: x[1], reverse=True) #"reverse" é argumento da função sorted(), que inverte a ordem do ranking
    #"lambda" é uma função anónima que funciona como um argumento que "economiza código"
     for i, (nome, pontos) in enumerate(ranking_ordenado, 1): #O "enumerate" funciona como um organizador de listas/tuplas/dicionários que nos entrega pares como os indices e seus valores
-        print(f"{i}º - {nome}: {pontos} pontos")
+        st.write(f"{i}º - {nome}: {pontos} pontos")
 
 
 # --- LÓGICA DO JOGO ---
 
 def jogar(perguntas_por_tema):
-    print(f"{Cores.AMARELO}Bem-vindo ao Science Quiz!{Cores.FIM}")
+    st.write(f"{Cores.AMARELO}Bem-vindo ao Science Quiz!{Cores.FIM}")
     nome = st.text_input(f"{Cores.AMARELO}Introduza o seu nome: {Cores.FIM}")
 
     temas = list(perguntas_por_tema.keys())
-    print(f"\n{Cores.NEGRITO}Temas disponíveis:{Cores.FIM}")
+    st.write(f"\n{Cores.NEGRITO}Temas disponíveis:{Cores.FIM}")
     for i, Tema in enumerate(temas, 1):
-        print(f"{Cores.NEGRITO}{i}. {Tema}{Cores.FIM}")
+        st.write(f"{Cores.NEGRITO}{i}. {Tema}{Cores.FIM}")
 
-    escolha = int(st.text_input("\nEscolha o número do tema: ")) - 1
+    escolha_input = st.text_input("Escolha o número do tema: ")
+if escolha_input: # Só corre se não estiver vazio
+    escolha = int(escolha_input) - 1
+    tema_escolhido = temas[escolha]
+else:
+    st.stop() # Para o código aqui até o utilizador escrever
     tema_escolhido = temas[escolha]
 
     pontuacao = 0
     questoes = perguntas_por_tema[tema_escolhido]
 
     for q in questoes:
-        print(f"\n{q['Pergunta']}")
+        st.write(f"\n{q['Pergunta']}")
         opcoes_letras = ['A', 'B', 'C']
         for i, opcao in enumerate(q['opcoes']):
-            print(f"{opcoes_letras[i]}) {opcao}")
+            st.write(f"{opcoes_letras[i]}) {opcao}")
         resposta = st.text_input("Qual a sua resposta (A, B, ou C)? ").upper().lower()#".lower()" transforma "A" em "a" e o "upper()" transforma "a" em "A"
         if resposta == q['correta']:
-           print(f"{Cores.VERDE}Correto! (+20 pontos){Cores.FIM}")
+           st.write(f"{Cores.VERDE}Correto! (+20 pontos){Cores.FIM}")
            pontuacao += 20
         else:
-            print(f"{Cores.VERMELHO}Errado! A resposta correta era {q['correta']}{Cores.FIM}.")
+            st.write(f"{Cores.VERMELHO}Errado! A resposta correta era {q['correta']}{Cores.FIM}.")
 
-    print(f"{Cores.AMARELO}\nFim de jogo, {nome}! Pontuação Final: {pontuacao}/100{Cores.FIM}")
+    st.write(f"{Cores.AMARELO}\nFim de jogo, {nome}! Pontuação Final: {pontuacao}/100{Cores.FIM}")
     guardar_pontuacao(nome, pontuacao)
 
 
