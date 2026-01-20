@@ -1,5 +1,5 @@
-import streamlit as st 
-import os 
+import streamlit as st #Para funcionar no site (python de web)
+import os #O ficheiro "os" confirma que o ficheiro "Questoes.txt" existe, evitando que o programa dê erro e feche sozinho
 
 class Cores: 
     VERDE = ''
