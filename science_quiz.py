@@ -1,3 +1,4 @@
+import streamlit as st #para que o código funcione no site definido por nós
 import os #O ficheiro "os" confirma que o ficheiro "Questoes.txt" existe, evitando que o programa dê erro e feche sozinho.
 
 class Cores: #paleta de cores para deixar o código mais belo esteticamente
@@ -54,14 +55,14 @@ def exibir_ranking():
 
 def jogar(perguntas_por_tema):
     print(f"{Cores.AMARELO}Bem-vindo ao Science Quiz!{Cores.FIM}")
-    nome = st.selectbox(f"{Cores.AMARELO}Introduza o seu nome: {Cores.FIM}")
+    nome = st.text_input(f"{Cores.AMARELO}Introduza o seu nome: {Cores.FIM}")
 
     temas = list(perguntas_por_tema.keys())
     print(f"\n{Cores.NEGRITO}Temas disponíveis:{Cores.FIM}")
     for i, Tema in enumerate(temas, 1):
         print(f"{Cores.NEGRITO}{i}. {Tema}{Cores.FIM}")
 
-    escolha = int(st.selectbox("\nEscolha o número do tema: ")) - 1
+    escolha = int(st.text_input("\nEscolha o número do tema: ")) - 1
     tema_escolhido = temas[escolha]
 
     pontuacao = 0
@@ -72,7 +73,7 @@ def jogar(perguntas_por_tema):
         opcoes_letras = ['A', 'B', 'C']
         for i, opcao in enumerate(q['opcoes']):
             print(f"{opcoes_letras[i]}) {opcao}")
-        resposta = st.selectbox("Qual a sua resposta (A, B, ou C)? ").upper().lower()#".lower()" transforma "A" em "a" e o "upper()" transforma "a" em "A"
+        resposta = st.text_input("Qual a sua resposta (A, B, ou C)? ").upper().lower()#".lower()" transforma "A" em "a" e o "upper()" transforma "a" em "A"
         if resposta == q['correta']:
            print(f"{Cores.VERDE}Correto! (+20 pontos){Cores.FIM}")
            pontuacao += 20
